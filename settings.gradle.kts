@@ -1,1 +1,1 @@
-rootProject.name = "revio"
+rootProject.name = "revision"
