@@ -9,7 +9,7 @@ data class Group(
     @Id val id: String?,
     val name: String,
     val creatorUsername: String? = null,
-    var active: Boolean? = true,
+    var active: Boolean = true,
     var users: ArrayList<String>? = null,
     val createdAt: LocalDateTime = LocalDateTime.now()
 )

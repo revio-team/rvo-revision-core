@@ -5,7 +5,7 @@ import com.sofia.revio.model.Group
 data class GroupCreateRequest(
     val name: String,
     var creatorUsername: String,
-    val active: Boolean?,
+    val active: Boolean,
     val users: ArrayList<String>? = null
 )
 

@@ -1,5 +1,6 @@
 package com.sofia.revio.service
 
+import com.sofia.revio.exception.GroupNotFoundException
 import com.sofia.revio.exception.InactiveGroupException
 import com.sofia.revio.model.Group
 import com.sofia.revio.model.request.GroupCreateRequest
@@ -20,8 +21,10 @@ class GroupService(
     }
 
     fun addToGroup(revisers: RevisersUsernameRequest, groupId: String): Group {
-        val group = groupRepository.findById(groupId).get()
-        if(group.active!!.not()){
+        val group = groupRepository.findById(groupId).orElseThrow {
+            throw GroupNotFoundException("Group not found")
+        }
+        if(group.active.not()){
             throw InactiveGroupException("Group now allowed to receive members. Current state is inactive")
         }
         group.users?.addAll(revisers.users)
@@ -34,6 +37,9 @@ class GroupService(
 
     fun removeGroup(groupId: String): Group {
         val group = groupRepository.findById(groupId).get()
+        if(group.active.not()){
+            throw InactiveGroupException("Group current state is inactive")
+        }
         group.active = false
 
         return groupRepository.save(group)
