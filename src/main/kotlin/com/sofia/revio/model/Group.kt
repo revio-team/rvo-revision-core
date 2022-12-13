@@ -10,6 +10,7 @@ data class Group(
     val name: String,
     val creatorUsername: String? = null,
     var active: Boolean = true,
+    val totemsPerGroup: Number,
     var users: ArrayList<String>? = null,
     val createdAt: LocalDateTime = LocalDateTime.now()
 )

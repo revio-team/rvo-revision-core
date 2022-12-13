@@ -6,9 +6,10 @@ data class GroupCreateRequest(
     val name: String,
     var creatorUsername: String,
     val active: Boolean,
-    val users: ArrayList<String>? = null
+    val totemsPerGroup: Number,
+    val users: ArrayList<String>? = null,
 )
 
-fun GroupCreateRequest.toGroup(): Group{
-    return Group(null, name, creatorUsername, active, users)
+fun GroupCreateRequest.toGroup(): Group {
+    return Group(null, name, creatorUsername, active, totemsPerGroup, users)
 }
