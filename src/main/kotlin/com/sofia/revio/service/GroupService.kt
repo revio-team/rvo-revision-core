@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class GroupService(
-    private val groupRepository: GroupRepository
+    private val groupRepository: GroupRepository,
 ) {
 
     fun createGroup(groupCreateRequest: GroupCreateRequest, username: String): Group {
@@ -24,7 +24,7 @@ class GroupService(
         val group = groupRepository.findById(groupId).orElseThrow {
             throw GroupNotFoundException("Group not found")
         }
-        if(group.active.not()){
+        if (group.active.not()) {
             throw InactiveGroupException("Group now allowed to receive members. Current state is inactive")
         }
         group.users?.addAll(revisers.users)
@@ -32,16 +32,45 @@ class GroupService(
     }
 
     fun getGroup(groupId: String): Group {
-        return groupRepository.findById(groupId).get()
+        return groupRepository.findById(groupId).orElseThrow {
+            throw GroupNotFoundException("Group not found")
+        }
     }
 
     fun removeGroup(groupId: String): Group {
-        val group = groupRepository.findById(groupId).get()
-        if(group.active.not()){
+        val group = groupRepository.findById(groupId).orElseThrow {
+            throw GroupNotFoundException("Group not found")
+        }
+        if (group.active.not()) {
             throw InactiveGroupException("Group current state is inactive")
         }
         group.active = false
 
         return groupRepository.save(group)
+    }
+
+    fun removeFromGroup(revisersList: RevisersUsernameRequest, groupId: String): Group? {
+        val group = groupRepository.findById(groupId).orElseThrow {
+            throw GroupNotFoundException("Group not found")
+        }
+        if (group.active.not()) {
+            throw InactiveGroupException("Group current state is inactive")
+        }
+        group.users?.removeAll(revisersList.users.toSet())
+
+        return groupRepository.save(group)
+    }
+
+    fun activateGroup(groupId: String): Group {
+        val group = groupRepository.findById(groupId).orElseThrow {
+            throw GroupNotFoundException("Group not found")
+        }
+        if (group.active) {
+            throw InactiveGroupException("Group current state is active")
+        }
+        group.active = true
+
+        return groupRepository.save(group)
+
     }
 }

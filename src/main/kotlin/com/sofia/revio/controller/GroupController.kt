@@ -39,6 +39,14 @@ class GroupController(
         return ResponseEntity.ok(groupService.getGroup(groupId))
     }
 
+    @PostMapping("/{groupId}/activate")
+    fun activateGroup(
+        @PathVariable groupId: String,
+        @RequestHeader username: String
+    ): ResponseEntity.BodyBuilder {
+        groupService.activateGroup(groupId)
+        return ResponseEntity.accepted()
+    }
     @DeleteMapping("/{groupId}")
     fun removeGroup(
         @PathVariable groupId: String,
@@ -48,12 +56,4 @@ class GroupController(
         return ResponseEntity.accepted()
     }
 
-    @PostMapping("/{groupId}/reviser")
-    fun addRevisersGroup(
-        @PathVariable groupId: String,
-        @RequestHeader username: String,
-        @RequestBody revisersList: RevisersUsernameRequest
-    ): ResponseEntity<Group> {
-        return ResponseEntity.ok(groupService.addToGroup(revisersList, groupId))
-    }
 }
