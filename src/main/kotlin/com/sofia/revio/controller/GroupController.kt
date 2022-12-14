@@ -1,6 +1,7 @@
 package com.sofia.revio.controller
 
 import com.sofia.revio.model.Group
+import com.sofia.revio.model.Totem
 import com.sofia.revio.model.request.GroupCreateRequest
 import com.sofia.revio.model.request.RevisersUsernameRequest
 import com.sofia.revio.service.GroupService
@@ -43,17 +44,17 @@ class GroupController(
     fun activateGroup(
         @PathVariable groupId: String,
         @RequestHeader username: String
-    ): ResponseEntity.BodyBuilder {
+    ): ResponseEntity<Any> {
         groupService.activateGroup(groupId)
-        return ResponseEntity.accepted()
+        return ResponseEntity.accepted().build()
     }
     @DeleteMapping("/{groupId}")
     fun removeGroup(
         @PathVariable groupId: String,
         @RequestHeader username: String
-    ): ResponseEntity.BodyBuilder {
+    ): ResponseEntity<Any> {
         groupService.removeGroup(groupId)
-        return ResponseEntity.accepted()
+        return ResponseEntity.accepted().build()
     }
 
 }

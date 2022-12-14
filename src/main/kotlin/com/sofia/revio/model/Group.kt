@@ -12,5 +12,6 @@ data class Group(
     var active: Boolean = true,
     val totemsPerGroup: Number,
     var users: ArrayList<String>? = null,
-    val createdAt: LocalDateTime = LocalDateTime.now()
+    val createdAt: LocalDateTime = LocalDateTime.now(),
+    var lastUpdatedAt: LocalDateTime = LocalDateTime.now()
 )

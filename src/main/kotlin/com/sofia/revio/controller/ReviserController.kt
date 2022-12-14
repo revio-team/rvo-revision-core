@@ -1,32 +1,26 @@
 package com.sofia.revio.controller
 
-import com.sofia.revio.model.Group
-import com.sofia.revio.model.request.RevisersUsernameRequest
-import com.sofia.revio.service.GroupService
+import com.sofia.revio.model.request.ReviserChangeRequest
+import com.sofia.revio.service.ReviserService
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.RequestHeader
+import org.springframework.web.bind.annotation.RequestBody
 
 @RestController
-@RequestMapping("/v1/groups")
-class ReviserController (
-    private val groupService: GroupService
-){
-
-    @PostMapping("/{groupId}/reviser")
-    fun addRevisersGroup(
-        @PathVariable groupId: String,
+@RequestMapping("/v1/reviser")
+class ReviserController(
+    private val reviserService: ReviserService
+) {
+    @PostMapping("/forward/")
+    fun activateTotem(
         @RequestHeader username: String,
-        @RequestBody revisersList: RevisersUsernameRequest
-    ): ResponseEntity<Group> {
-        return ResponseEntity.ok(groupService.addToGroup(revisersList, groupId))
-    }
-
-    @DeleteMapping("/{groupId}/reviser")
-    fun removeRevisersGroup(
-        @PathVariable groupId: String,
-        @RequestHeader username: String,
-        @RequestBody revisersList: RevisersUsernameRequest
-    ): ResponseEntity<Group> {
-        return ResponseEntity.ok(groupService.removeFromGroup(revisersList, groupId))
+        @RequestBody reviserChangeRequest: ReviserChangeRequest
+    ): ResponseEntity<Any> {
+        reviserService.nextReviser(reviserChangeRequest)
+        return ResponseEntity.accepted().build()
     }
 }
